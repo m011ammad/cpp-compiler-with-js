@@ -652,6 +652,5 @@ function lexicalAnalyze(){
 lexicalAnalyze();
 
 tokenTable.forEach(i => {
-    alert(i.name + " | " + i.value + " | " + i.line);
+    console.log(i.name + " | " + i.value + " | " + i.line);
 });
-
