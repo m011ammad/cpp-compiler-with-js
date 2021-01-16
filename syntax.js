@@ -13,24 +13,28 @@ stmt => id=expr;
 stmts => stmts | stmt
 
 expr => term exprPrim
-exprPrim => + term exprPrim | - term exprPrim | E
-expr => term andPrime
-andPrime => &&expr andPrime | ||expr andPrime | E
+exprPrim => + term exprPrim | - term exprPrim | &&term exprPrime | ||term exprPrime | E
+term => factor termPrime
+termPrime => *factor termPrime | /factor termPrime | E
+factor => number | (expr) | id
 
 */
 
 // test for input
 let lexed = [
-    {token: 'id', value: 'test2', line: 0},
-    {token: '=', value: '', line: 0},
-    {token: 'number', value: 'test', line: 0},
-    {token: '+', value: '', line: 1},
-    {token: 'number', value: '', line: 1},
-    {token: '&&', value: '', line: 1},
-    {token: 'number', value: '', line: 1},
-    {token: '+', value: '', line: 1},
-    {token: 'number', value: '', line: 1},
-    {token: ';', value: '', line: 1}
+    {token: 'do', value: '3', line: 0},
+    {token: 'id', value: '3', line: 0},
+    {token: '=', value: '3', line: 0},
+    {token: 'number', value: '3', line: 0},
+    {token: ';', value: '3', line: 0},
+    {token: 'while', value: '3', line: 0},
+    {token: '(', value: '3', line: 0},
+    {token: 'number', value: '3', line: 0},
+    {token: '+', value: '3', line: 0},
+    {token: 'number', value: '3', line: 0},
+    // {token: ';', value: '3', line: 0},
+    {token: ')', value: 'test', line: 0},
+    {token: ';', value: 'test', line: 0},
 ];
 
 let syntaxAnalysis = () => {
@@ -43,22 +47,24 @@ let syntaxAnalysis = () => {
             // console.log(lexed.length);
             
             if(
-                !(
-                // defineFunc() ||
-                commentFunc()||
-                assignFunc() 
+                (
+                assignFunc() ||
+                // console.log(222)||
+                // defineFunc() || 
+                // commentFunc()
                 // ifElseFunc() ||
                 // whileFunc() ||
-                // doWhileFunc() ||
+                doWhileFunc()
                 // forFunc() ||
                 // stmtsFunc() ||
                 
             )){
-                return false;
+                return true;
             }
-
+            
         }
-        return true;
+        console.log('nothing matched! ERROR!');
+        return false;
     }
 
     let commentFunc = () => {
@@ -69,28 +75,34 @@ let syntaxAnalysis = () => {
                 console.log(lexed[lookHead]);
                 lookHead ++;
             }
+            return true;
         }
     }
-        
+
     let expr = () => {
         if(term()){
             if(exprPrime()){
+                console.log('exprPrime matched!');
                 return true;
             }else{
                 console.log('exprPrime and andPrime not found');
-                return false;
+                // return false;
             }
+        
         }else{
             console.log('term does not matched!');
             return false;
         }
     }
     let exprPrime = () => {
-        if(lexed[lookHead].token == '+' || lexed[lookHead].token == '-'){
+        if(lexed[lookHead].token == '&&' || lexed[lookHead].token == '||'){
             iSave = lookHead;
             lookHead ++;
+            console.log('+ or - matched!');
             if(term()){
+                console.log('term matched!');
                 if(exprPrime()){
+                    console.log('exprPrime matched!');
                     return true;
                 }else{
                     return false;
@@ -98,11 +110,12 @@ let syntaxAnalysis = () => {
             }else{
                 return false;
             }
-        }else if(lexed[lookHead].token == '&&' || lexed[lookHead].token == '||'){
+        }else if(lexed[lookHead].token == '+' || lexed[lookHead].token == '-'){
             iSave = lookHead;
             lookHead ++;
             if(expr()){
                 if(exprPrime()){
+                    console.log('run');
                     return true;
                 }else{
                     return false;
@@ -112,16 +125,19 @@ let syntaxAnalysis = () => {
             }
         }
         else{
+            console.log('&& || + - not found!');
             return true;
         }
     }
-    
     let term = () => {
         if(factor()){
+            // iSave = lookHead;
             if(termPrime()){
+                console.log('run2');
                 return true;
             }else{
                 console.log('termPrime does not matched!');
+                // lookHead = iSave;
                 return false;
             }
         }else{
@@ -135,6 +151,7 @@ let syntaxAnalysis = () => {
             lookHead ++;
             if(factor()){
                 if(termPrime()){
+                    console.log('run');
                     return true;
                 }else{
                     return false;
@@ -143,12 +160,13 @@ let syntaxAnalysis = () => {
                 return false;
             }
         }else{
+            console.log('run1');
             return true;
         }
     }
-
     let factor  = () => {
         if(lexed[lookHead].token == 'number'){
+            console.log(lexed[lookHead].token);
             lookHead ++;
             return true;
         }else if(lexed[lookHead].token == '('){
@@ -157,25 +175,32 @@ let syntaxAnalysis = () => {
             if(expr()){
                 if(lexed[lookHead].token == ')'){
                     lookHead ++;
+                    console.log(1111);
                     return true;
                 }else{
                     console.log(') not matched;');
                     iSave = lookHead;
+                    console.log(1111);
                     return false;
                 }
             }else{
                 console.log('expr not matched');
                 lookHead = iSave;
+                console.log(1111);
                 return false;
             }
         }else if(lexed[lookHead].token == 'id'){
             lookHead ++;
+            console.log(1111);
             return true;
         }else{
             console.log('factorFunc does not matched!');
+            console.log(lexed[lookHead].token);
             return false;
         }
     }
+
+    // console.log(expr());
 
     let operators  = () => {
         return true;
@@ -190,16 +215,8 @@ let syntaxAnalysis = () => {
             console.log('type is false');
             return false;
         } else{
-            if(lexed[lookHead].token == 'space'){
-                console.log('space matched!');
-                lookHead ++;
-            }else{
-                console.log('space does not matched!');
-                return false;
-            }
             if(lexed[lookHead].token == 'id'){
                 console.log('id matched!');
-                console.log(lexed[lookHead].value);
                 lookHead ++;
             }else{
                 console.log('id does not matched!');
@@ -268,10 +285,11 @@ let syntaxAnalysis = () => {
                     if(lexed[lookHead].token == ';'){
                         console.log('semiColon matched!');
                         lookHead ++;
+                        return true;
                     } else{
-                        console.log(lookHead);
+                        // console.log(lexed[lookHead].token);
                         lookHead = iSave;
-                        console.log('semiColon does not match!');
+                        console.log('assignFunc does not matched!');
                         return false;
                     }
                 } else {
@@ -288,10 +306,7 @@ let syntaxAnalysis = () => {
             console.log('id does not matched!');
             return false;
         }
-        return true;
     }
-
-    console.log(stmt());
 
     let ifElseFunc = () => {
         // if(!matchStatment()){
@@ -311,7 +326,6 @@ let syntaxAnalysis = () => {
                 lookHead ++;
                 if(expr()){
                     console.log('expr Function in while matched!');
-                    lookHead ++;
                     if(lexed[lookHead].token == ')'){
                         console.log(') sign in while matched!');
                         lookHead ++;
@@ -326,6 +340,7 @@ let syntaxAnalysis = () => {
                         }
                     }else{
                         console.log(') sign does not matched!');
+                        console.log(lexed[lookHead].token);
                         lookHead = iSave;
                         return false;
                     }
@@ -341,7 +356,6 @@ let syntaxAnalysis = () => {
             }
         }else{
             console.log('while does not matched!');
-            lookHead = iSave;
             return false;
         }
     }
@@ -349,7 +363,62 @@ let syntaxAnalysis = () => {
     // console.log(whileFunc());
 
     let doWhileFunc = () => {
-        return true;
+        if(lexed[lookHead].token == 'do'){
+            iSave = lookHead;
+            console.log('do matched!');
+            lookHead ++;
+            if(stmt()){
+                console.log('stmt matched!');
+                if(lexed[lookHead].token == 'while'){
+                    console.log('while matched!');
+                    lookHead ++;
+                    if(lexed[lookHead].token == '('){
+                        console.log('( sign in while matched!');
+                        lookHead ++;
+                        if(expr()){
+                            console.log('expr Function in while matched!');
+                            if(lexed[lookHead].token == ')'){
+                                console.log(') sign matched!');
+                                lookHead ++;
+                                if(lexed[lookHead].token == ';'){                                    
+                                    console.log('; sign matched!');
+                                    lookHead ++;
+                                    return true;
+                                }else{
+                                    console.log('; sign does not matched!');
+                                    lookHead = iSave;
+                                    return false;
+                                }
+                            }else{
+                                console.log(') sign does not matched!');
+                                lookHead = iSave;
+                                return false;
+                            }
+                        }else{
+                            console.log('expr Function does not matched!');
+                            lookHead = iSave;
+                            return false;
+                        }
+                    }else{
+                        console.log('( sign does not matched!');
+                        console.log(lexed[lookHead].token);
+                        lookHead = iSave;
+                        return false;
+                    }
+                }else{
+                    console.log('while does not matched!');
+                    lookHead = iSave;
+                    return false;
+                }
+            }else{
+                console.log('stmt does not matched!');
+                lookHead = iSave;
+                return false;
+            }
+        }else{
+            console.log('do does not matched!');
+            return false;
+        }
     }
 
     let forFunc = () => {
@@ -359,6 +428,9 @@ let syntaxAnalysis = () => {
     let stmtsFunc = () => {
         return true;
     }
+
+    console.log(stmt());
+    console.log("syntaxAnalysis Function finished!");
 
 }
 
