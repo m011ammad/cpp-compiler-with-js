@@ -22,10 +22,9 @@ function Token(name){
     this.line = 0;
 }
 
-const initialInput = `Ey if for
-26.8E-25 && || & |
-int Iran Ey Marz 
-Por Gohar $`;
+const initialInput = `if(x==2){
+    int x=2;
+} $`;
 var newInput = initialInput.replace(/  +/g, ' ');
 var buffer = new Buffer(newInput);
 var tokenTable = new Array();
@@ -308,7 +307,7 @@ function lexicalAnalyze(){
                 break;
             case 17:
                 buffer.takeLexeme();
-                var token = new Token("relop");
+                var token = new Token("<=");
                 token.value = "<=";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -317,7 +316,7 @@ function lexicalAnalyze(){
             case 18:
                 buffer.retract();
                 buffer.takeLexeme();
-                var token = new Token("relop");
+                var token = new Token("<");
                 token.value = "<";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -332,7 +331,7 @@ function lexicalAnalyze(){
                 break;
             case 20:
                 buffer.takeLexeme();
-                var token = new Token("relop");
+                var token = new Token(">=");
                 token.value = ">=";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -341,7 +340,7 @@ function lexicalAnalyze(){
             case 21:
                 buffer.retract();
                 buffer.takeLexeme();
-                var token = new Token("relop");
+                var token = new Token(">");
                 token.value = ">";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -356,7 +355,7 @@ function lexicalAnalyze(){
                 break;
             case 23:
                 buffer.takeLexeme();
-                var token = new Token("relop");
+                var token = new Token("==");
                 token.value = "==";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -371,7 +370,7 @@ function lexicalAnalyze(){
                 break;
             case 25:
                 buffer.takeLexeme();
-                var token = new Token("relop");
+                var token = new Token("!=");
                 token.value = "!=";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
