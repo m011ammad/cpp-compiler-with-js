@@ -24,6 +24,14 @@ function Token(name){
 
 const initialInput = `if(x==2){
     int x=2;
+    int x=2;
+    int x=2;
+    int x=2;
+    int x=2;
+    int x=2;
+    int x=2;
+    int x=2;
+    int x=2;
 } $`;
 var newInput = initialInput.replace(/  +/g, ' ');
 var buffer = new Buffer(newInput);
@@ -650,6 +658,6 @@ function lexicalAnalyze(){
 }
 lexicalAnalyze();
 
-tokenTable.forEach(i => {
-    console.log(i.name + " | " + i.value + " | " + i.line);
-});
+// tokenTable.forEach(i => {
+//     console.log(i.name + " | " + i.value + " | " + i.line);
+// });

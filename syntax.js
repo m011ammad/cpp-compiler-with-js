@@ -21,21 +21,31 @@ factor => number | (expr) | id
 */
 
 // test for input
-let lexed = [
-    {token: 'do', value: '3', line: 0},
-    {token: 'id', value: '3', line: 0},
-    {token: '=', value: '3', line: 0},
-    {token: 'number', value: '3', line: 0},
-    {token: ';', value: '3', line: 0},
-    {token: 'while', value: '3', line: 0},
-    {token: '(', value: '3', line: 0},
-    {token: 'number', value: '3', line: 0},
-    {token: '+', value: '3', line: 0},
-    {token: 'number', value: '3', line: 0},
-    // {token: ';', value: '3', line: 0},
-    {token: ')', value: 'test', line: 0},
-    {token: ';', value: 'test', line: 0},
-];
+// let tokenTable = [
+//     {name: 'for', value: '', line: 0},
+//     {name: '(', value: '', line: 0},
+//     {name: 'id', value: '', line: 0},
+//     {name: '=', value: '', line: 0},
+//     {name: 'number', value: '', line: 0},
+//     {name: ';', value: '', line: 0},
+//     {name: 'id', value: '', line: 0},
+//     {name: '=>', value: '', line: 0},
+//     {name: 'id', value: '', line: 0},
+//     {name: ';', value: '', line: 0},
+//     {name: 'id', value: '', line: 0},
+//     {name: '+', value: '', line: 0},
+//     {name: 'number', value: '', line: 0},
+//     {name: ')', value: '', line: 0},
+//     {name: '{', value: '', line: 0},
+//     {name: 'id', value: '', line: 0},
+//     {name: '=', value: 'test', line: 0},
+//     {name: 'number', value: 'test', line: 0},
+//     {name: ';', value: 'test', line: 0},
+//     {name: '}', value: 'test', line: 0},
+//     {name: 'id', value: 'test', line: 0},
+//     {name: '=', value: 'test', line: 0},
+//     {name: 'number', value: 'test', line: 0},
+// ];
 
 let syntaxAnalysis = () => {
     let lookHead = 0;
@@ -43,36 +53,37 @@ let syntaxAnalysis = () => {
     
     let stmt = () => {
 
-        while(lookHead < lexed.length){
-            // console.log(lexed.length);
+        while(lookHead < tokenTable.length){
+            // console.log(tokenTable.length);
             
             if(
                 (
                 assignFunc() ||
-                // console.log(222)||
-                // defineFunc() || 
-                // commentFunc()
-                // ifElseFunc() ||
-                // whileFunc() ||
-                doWhileFunc()
-                // forFunc() ||
-                // stmtsFunc() ||
+                defineFunc()  ||
+                commentFunc() || 
+                ifElseFunc() ||
+                whileFunc() ||
+                doWhileFunc() ||
+                forFunc() ||
+                functionFunc() ||
+                stmtsFunc() 
                 
             )){
                 return true;
+            }else{
+                console.log('nothing matched! ERROR!');
+                return false;
             }
             
         }
-        console.log('nothing matched! ERROR!');
-        return false;
     }
 
     let commentFunc = () => {
-        let backSlashLine = lexed[lookHead].line;
-        if(lexed[lookHead].token == '//'){
+        let backSlashLine = tokenTable[lookHead].line;
+        if(tokenTable[lookHead].name == '//'){
             lookHead ++;
-            while(lexed[lookHead].line == backSlashLine){
-                console.log(lexed[lookHead]);
+            while(tokenTable[lookHead].line == backSlashLine){
+                console.log(tokenTable[lookHead]);
                 lookHead ++;
             }
             return true;
@@ -94,11 +105,17 @@ let syntaxAnalysis = () => {
             return false;
         }
     }
+   
     let exprPrime = () => {
-        if(lexed[lookHead].token == '&&' || lexed[lookHead].token == '||'){
+        if(tokenTable[lookHead].name == '&&' || tokenTable[lookHead].name == '||'
+         || tokenTable[lookHead].name == '=' || tokenTable[lookHead].name == '=='
+         || tokenTable[lookHead].name == '=<' || tokenTable[lookHead].name == '=>'
+         || tokenTable[lookHead].name == '>' || tokenTable[lookHead].name == '<'
+         || tokenTable[lookHead].name == '=!'
+         ){
             iSave = lookHead;
             lookHead ++;
-            console.log('+ or - matched!');
+            console.log('&& or || matched!');
             if(term()){
                 console.log('term matched!');
                 if(exprPrime()){
@@ -110,7 +127,7 @@ let syntaxAnalysis = () => {
             }else{
                 return false;
             }
-        }else if(lexed[lookHead].token == '+' || lexed[lookHead].token == '-'){
+        }else if(tokenTable[lookHead].name == '+' || tokenTable[lookHead].name == '-'){
             iSave = lookHead;
             lookHead ++;
             if(expr()){
@@ -125,7 +142,7 @@ let syntaxAnalysis = () => {
             }
         }
         else{
-            console.log('&& || + - not found!');
+            console.log('+ and - not found!');
             return true;
         }
     }
@@ -146,7 +163,7 @@ let syntaxAnalysis = () => {
         }
     }
     let termPrime = () => {
-        if(lexed[lookHead].token == '*' || lexed[lookHead].token == '/'){
+        if(tokenTable[lookHead].name == '*' || tokenTable[lookHead].name == '/'){
             iSave = lookHead;
             lookHead ++;
             if(factor()){
@@ -165,15 +182,15 @@ let syntaxAnalysis = () => {
         }
     }
     let factor  = () => {
-        if(lexed[lookHead].token == 'number'){
-            console.log(lexed[lookHead].token);
+        if(tokenTable[lookHead].name == 'number'){
+            console.log(tokenTable[lookHead].name);
             lookHead ++;
             return true;
-        }else if(lexed[lookHead].token == '('){
+        }else if(tokenTable[lookHead].name == '('){
             iSave = lookHead;
             lookHead ++;
             if(expr()){
-                if(lexed[lookHead].token == ')'){
+                if(tokenTable[lookHead].name == ')'){
                     lookHead ++;
                     console.log(1111);
                     return true;
@@ -189,13 +206,13 @@ let syntaxAnalysis = () => {
                 console.log(1111);
                 return false;
             }
-        }else if(lexed[lookHead].token == 'id'){
+        }else if(tokenTable[lookHead].name == 'id'){
+            console.log(tokenTable[lookHead].name);
             lookHead ++;
-            console.log(1111);
             return true;
         }else{
             console.log('factorFunc does not matched!');
-            console.log(lexed[lookHead].token);
+            console.log(tokenTable[lookHead].name);
             return false;
         }
     }
@@ -206,16 +223,12 @@ let syntaxAnalysis = () => {
         return true;
     }
 
-    let optexpr  = () => {
-        return true;
-    }
-
     let defineFunc = () => {
         if(type() == false){
             console.log('type is false');
             return false;
         } else{
-            if(lexed[lookHead].token == 'id'){
+            if(tokenTable[lookHead].name == 'id'){
                 console.log('id matched!');
                 lookHead ++;
             }else{
@@ -226,7 +239,7 @@ let syntaxAnalysis = () => {
             } else{
                 return false;
             }
-            if(lexed[lookHead].token == ';'){
+            if(tokenTable[lookHead].name == ';'){
                 console.log('semiColon matched!');
                 lookHead ++;
             } else{
@@ -238,12 +251,12 @@ let syntaxAnalysis = () => {
     }
     let type = () => {
         if(
-        lexed[lookHead].token == 'int' | 
-        lexed[lookHead].token == 'float' |
-        lexed[lookHead].token == 'string' |
-        lexed[lookHead].token == 'bool' |
-        lexed[lookHead].token == 'char' |
-        lexed[lookHead].token == 'double'
+        tokenTable[lookHead].name == 'int' | 
+        tokenTable[lookHead].name == 'float' |
+        tokenTable[lookHead].name == 'string' |
+        tokenTable[lookHead].name == 'bool' |
+        tokenTable[lookHead].name == 'char' |
+        tokenTable[lookHead].name == 'double'
         ){
             console.log('type(int, float , ...) matched!');
             lookHead ++;
@@ -253,11 +266,11 @@ let syntaxAnalysis = () => {
         }
     }
     let numPrime = () => {
-        if(lexed[lookHead].token == '='){
+        if(tokenTable[lookHead].name == '='){
             console.log('equal sign matched!');
             iSave = lookHead;
             lookHead ++;
-            if(lexed[lookHead].token == 'number'){
+            if(tokenTable[lookHead].name == 'number'){
                 console.log('number matched!');
                 lookHead ++;
                 return true;
@@ -273,21 +286,21 @@ let syntaxAnalysis = () => {
     }
 
     let assignFunc = () => {
-        if(lexed[lookHead].token == 'id'){
+        if(tokenTable[lookHead].name == 'id'){
             iSave = lookHead;
             console.log('id matched!');
             lookHead ++;
-            if(lexed[lookHead].token == '='){
+            if(tokenTable[lookHead].name == '='){
                 console.log('= sign matched!');
                 lookHead ++;
                 if(expr()){
                     console.log('exprFunc matched');
-                    if(lexed[lookHead].token == ';'){
+                    if(tokenTable[lookHead].name == ';'){
                         console.log('semiColon matched!');
                         lookHead ++;
                         return true;
                     } else{
-                        // console.log(lexed[lookHead].token);
+                        // console.log(tokenTable[lookHead].name);
                         lookHead = iSave;
                         console.log('assignFunc does not matched!');
                         return false;
@@ -309,24 +322,180 @@ let syntaxAnalysis = () => {
     }
 
     let ifElseFunc = () => {
-        // if(!matchStatment()){
-        //     return false;
-        // }else {
+        if(matchedStmt()){
+            console.log('ifElseFunc does  matched!');
+            return true;
+        }else if(unmatchedStmt()){
+            console.log('ifElseFunc does  matched!');
+            return true;
+        }else{
+            console.log('ifElseFunc does not matched!');
+            return false;
+        }
+    }
+    let matchedStmt = () => {
+        if(tokenTable[lookHead].name == 'if'){
+            let iSaveF;
+            iSaveF = lookHead;
+            lookHead ++;
+            console.log('if matched!');
+            if(tokenTable[lookHead].name == '('){
+                console.log('( sign matched!');
+                lookHead ++;
+                if(expr()){
+                 console.log('expr Function in matchedStmt matched!');
+                    if(tokenTable[lookHead].name == ')'){
+                        lookHead ++;
+                        console.log(') sign matched!');
+                            if(matchedStmt()){
+                                console.log('matchedStmt Function in matchedStmt matched!');
+                                    if(tokenTable[lookHead].name == 'else'){
+                                        lookHead ++;
+                                        console.log('else sign matched!');
+                                            if(matchedStmt()){
+                                                console.log('matchedStmt2 Function in matchedStmt matched!'); 
+                                                return true;                                         
+                                            }else{
+                                                console.log('matchedStmt Function in matchedStmt not matched!');  
+                                                return false;
+                                            }                                         
+                                    }else{
+                                        lookHead = iSaveF;
+                                        console.log('else in matchedStmt not matched!');  
+                                        return false;
+                                    }                                
+                            }else{
+                                lookHead = iSave;
+                                console.log('matchedStmt Function in matchedStmt not matched!');  
+                                return false;
+                            } 
+                    }else{
+                        lookHead = iSave;
+                        console.log(') sign in matchedStmt not matched!');  
+                        return false;
+                    }
+                }else{
+                    lookHead = iSave;
+                    console.log('expr Function in matchedStmt not matched!');  
+                    return false;
+                }
+            }else{
+                lookHead = iSave;
+                console.log('( sign in matchedStmt not matched!');  
+                return false;
+            }
+        }else if(stmtsFunc()){
+            console.log('stmtsFunc Function in matchedStmt matched!');  
+            return true;
+        }else{
+            console.log('nothing got matched in matchedStmt!'); 
+            return false;
+        }
+    }
+    let unmatchedStmt = () => {
+        if(tokenTable[lookHead].name == 'if'){
+            iSave = lookHead;
+            lookHead ++;
+            console.log('if matched!');
+            if(tokenTable[lookHead].name == '('){
+                console.log('( sign matched!');
+                lookHead ++;
+                if(expr()){
+                    console.log('expr Function in unmatchedStmt matched!');
+                    if(tokenTable[lookHead].name == ')'){
+                        lookHead ++;
+                        console.log(') sign matched!');
+                        if(stmtsFunc()){
+                            console.log('ifElseFunc Function in unmatchedStmt matched!');
+                            return true;
+                        }else{
+                            lookHead = iSave;
+                            console.log('ifElseFunc Function in unmatchedStmt not matched!'); 
+                        }
+                    }else{
+                        lookHead = iSave;
+                        console.log(') sign in unmatchedStmt not matched!');  
+                        return false;
+                    }
+                }else{
+                    lookHead = iSave;
+                    console.log('expr Function in unmatchedStmt not matched!');  
+                    return false;
+                }
+            }else{
+                lookHead = iSave;
+                console.log('( sign in unmatchedStmt not matched!');  
+                return false;
+            }
+        }else if(tokenTable[lookHead].name == 'if'){
+            iSave = lookHead;
+            lookHead ++;
+            console.log('if matched!');
+            if(tokenTable[lookHead].name == '('){
+                console.log('( sign matched!');
+                lookHead ++;
+                if(expr()){
+                 console.log('expr Function in matchedStmt matched!');
+                    if(tokenTable[lookHead].name == ')'){
+                        lookHead ++;
+                        console.log(') sign matched!');
+                            if(matchedStmt()){
+                                console.log('matchedStmt Function in matchedStmt matched!');
+                                    if(tokenTable[lookHead].name == 'else'){
+                                        lookHead ++;
+                                        console.log('else sign matched!');
+                                            if(unmatchedStmt()){
+                                                console.log('unmatchedStmt Function in matchedStmt matched!');
+                                                return true;                                          
+                                            }else{
+                                                lookHead = iSave;
+                                                console.log('unmatchedStmt Function in unmatchedStmt not matched!');  
+                                                return false;
+                                            }                                         
+                                    }else{
+                                        lookHead = iSave;
+                                        console.log('else in matchedStmt not matched!');  
+                                        return false;
+                                    }                                
+                            }else{
+                                lookHead = iSave;
+                                console.log('matchedStmt Function in matchedStmt not matched!');  
+                                return false;
+                            } 
+                    }else{
+                        lookHead = iSave;
+                        console.log(') sign in matchedStmt not matched!');  
+                        return false;
+                    }
+                }else{
+                    lookHead = iSave;
+                    console.log('expr Function in matchedStmt not matched!');  
+                    return false;
+                }
+            }else{
+                lookHead = iSave;
+                console.log('( sign in matchedStmt not matched!');  
+                return false;
+            }
+        }else{
+            console.log('nothing got matched in unmatchedStmt!');  
+            return false;
+        }
 
-        // }
+
     }
 
     let whileFunc = () => {
-        if(lexed[lookHead].token == 'while'){
+        if(tokenTable[lookHead].name == 'while'){
             iSave = lookHead;
             console.log('while matched!');
             lookHead ++;
-            if(lexed[lookHead].token == '('){
+            if(tokenTable[lookHead].name == '('){
                 console.log('( sign matched!');
                 lookHead ++;
                 if(expr()){
                     console.log('expr Function in while matched!');
-                    if(lexed[lookHead].token == ')'){
+                    if(tokenTable[lookHead].name == ')'){
                         console.log(') sign in while matched!');
                         lookHead ++;
                         if(stmt()){
@@ -340,7 +509,7 @@ let syntaxAnalysis = () => {
                         }
                     }else{
                         console.log(') sign does not matched!');
-                        console.log(lexed[lookHead].token);
+                        console.log(tokenTable[lookHead].name);
                         lookHead = iSave;
                         return false;
                     }
@@ -363,24 +532,24 @@ let syntaxAnalysis = () => {
     // console.log(whileFunc());
 
     let doWhileFunc = () => {
-        if(lexed[lookHead].token == 'do'){
+        if(tokenTable[lookHead].name == 'do'){
             iSave = lookHead;
             console.log('do matched!');
             lookHead ++;
             if(stmt()){
                 console.log('stmt matched!');
-                if(lexed[lookHead].token == 'while'){
+                if(tokenTable[lookHead].name == 'while'){
                     console.log('while matched!');
                     lookHead ++;
-                    if(lexed[lookHead].token == '('){
+                    if(tokenTable[lookHead].name == '('){
                         console.log('( sign in while matched!');
                         lookHead ++;
                         if(expr()){
                             console.log('expr Function in while matched!');
-                            if(lexed[lookHead].token == ')'){
+                            if(tokenTable[lookHead].name == ')'){
                                 console.log(') sign matched!');
                                 lookHead ++;
-                                if(lexed[lookHead].token == ';'){                                    
+                                if(tokenTable[lookHead].name == ';'){                                    
                                     console.log('; sign matched!');
                                     lookHead ++;
                                     return true;
@@ -401,7 +570,6 @@ let syntaxAnalysis = () => {
                         }
                     }else{
                         console.log('( sign does not matched!');
-                        console.log(lexed[lookHead].token);
                         lookHead = iSave;
                         return false;
                     }
@@ -422,16 +590,178 @@ let syntaxAnalysis = () => {
     }
 
     let forFunc = () => {
-        return true;
+        if(tokenTable[lookHead].name == 'for'){
+            let iSaveFor;
+            iSaveFor = lookHead;
+            lookHead
+            console.log('for matched!');
+            lookHead ++;
+            if(tokenTable[lookHead].name == '('){
+                console.log('( matched!');
+                lookHead ++;
+                if(optexpr()){
+                    console.log('first optexpr got matched!');
+                    if(tokenTable[lookHead].name == ';'){
+                        console.log('; matched!');
+                        lookHead ++;
+                        if(optexpr()){
+                            console.log('second optexpr got matched!');
+                            if(tokenTable[lookHead].name == ';'){
+                                console.log('; matched!');
+                                lookHead ++;
+                                if(optexpr()){
+                                    console.log('third optexpr got matched!');
+                                    if(tokenTable[lookHead].name == ')'){
+                                        console.log(') matched!');
+                                        lookHead ++;
+                                        if(stmt()){
+                                            console.log('stmt in forFunc got matched!');
+                                            return true;
+                                        }else{
+                                            console.log('stmt in forFunc does not matched!');
+                                            lookHead = iSaveFor;
+                                            return false;
+                                        }
+                                    }else{
+                                        console.log(') in forFunc does not matched!');
+                                        lookHead = iSaveFor;
+                                        return false;
+                                    }
+                                }else{
+                                    console.log('third optexpr did not match!');
+                                    lookHead = iSaveFor;
+                                    return false;
+                                }
+                            }else{
+                                console.log('; in forFunc does not matched!');
+                                lookHead = iSaveFor;
+                                return false;
+                            }
+                        }else{
+                            console.log('second optexpr did not match!');
+                            lookHead = iSaveFor;
+                            return false;
+                        }
+                    }else{
+                        console.log('; in forFunc does not matched!');
+                        lookHead = iSaveFor;
+                        return false;
+                    }
+                }else{
+                    console.log('first optexpr did not match!');
+                    lookHead = iSaveFor;
+                    return false;
+                }
+            }else{
+                console.log('( in forFunc does not matched!');
+                lookHead = iSaveFor;
+                return false;
+            }
+        }else{
+            console.log('forFunc nothing got matched!');
+            return false;
+        }
     }
-
+    let optexpr = () => {
+        if(expr()){
+            console.log('expr in optexpr got matched!');
+            return true;
+        }else{
+            console.log('empty expr in optexpr got matched!');
+            return true;
+        }
+    }
+    let functionFunc = () => {
+        if(type()){
+            console.log('type in functionFunc got matched!');
+            if(tokenTable[lookHead].name == 'id'){
+                console.log('id in functionFunc got matched!');
+                let iSaveF ;
+                iSaveF = lookHead;
+                lookHead ++;
+                if(tokenTable[lookHead].name == '('){
+                    console.log('( sign in functionFunc got matched!');
+                    lookHead ++;
+                    if(expr()){
+                        console.log(' expr in functionFunc got matched!');
+                        if(tokenTable[lookHead].name == ')'){
+                            console.log(') sign in functionFunc got matched!');
+                            lookHead ++;
+                            if(stmt()){
+                                console.log('stmt in functionFunc got matched!');
+                                return true;
+                            }else{
+                                console.log('stmt in functionFunc does not matched!');
+                                lookHead = iSaveF;
+                                return false;
+                            }
+                        }else{
+                            console.log(') sign in functionFunc does not matched!');
+                            lookHead = iSaveF;
+                            return false;
+                        }
+                    }else{
+                        console.log('expr in functionFunc does not matched!');
+                        lookHead = iSaveF;
+                        return false;
+                    }
+                }else{
+                    console.log('( sign in functionFunc does not matched!');
+                    lookHead = iSaveF;
+                    return false;
+                }
+            }else{
+                console.log('id in functionFunc does not matched!');
+                lookHead = iSaveF;
+                return false;
+            }
+        }else{
+            console.log('functionFunc nothing matched!');
+            return false;
+        }
+    }
     let stmtsFunc = () => {
-        return true;
+        if(tokenTable[lookHead].name == '{'){
+            console.log('{ sign matched!');
+            iSave = lookHead;
+            lookHead ++;
+            if(stmtsPrimeFunc()){
+                if(tokenTable[lookHead].name == '}'){
+                    console.log('} sign matched!');
+                    lookHead ++;
+                    return true;
+                }else{
+                    console.log('} does not sign matched!');
+                    iSave = lookHead;
+                    return false;
+                }
+            }else{
+                console.log('stmtPrimeFunc does not matched!');
+                iSave = lookHead;
+                return false;
+            }
+        }else{
+            console.log('{ sign does not matched!');
+            return false;
+        }
+    }
+    let stmtsPrimeFunc = () => {
+        if(stmt()){
+            if(stmtsPrimeFunc()){
+                return true;
+            }else{
+                console.log('stmtPrimeFunc does not work!');
+                return false;
+            }
+        }else{
+            console.log('stmtPrimeFunc does work!');
+            return true;
+        }
     }
 
     console.log(stmt());
     console.log("syntaxAnalysis Function finished!");
 
 }
-
+console.table(tokenTable);
 console.log(syntaxAnalysis());
