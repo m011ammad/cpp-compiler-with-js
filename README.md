@@ -3,11 +3,14 @@ A JavaScript Program to lexical and syntax analyse C++ program. It Uses various 
 
 ## Project structure
 
+### Grammer
+`grammer.txt`
+
 ### Lexical analyzer
-`tokens.l`
+`LexicalAnalyzer.js`
 
 ### Syntax analyzer
-`parser.y`
+`syntax.js`
 
 This is currently very alpha. Only a few basic language features are implemented.
 
