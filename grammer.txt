@@ -12,6 +12,12 @@ exprPrim => + term exprPrim | - term exprPrim | &&term exprPrime | ||term exprPr
 term => factor termPrime
 termPrime => *factor termPrime | /factor termPrime | E
 factor => number | (expr) | id
+ro => =< | => | == | != | > | <
+optexpr => expr | E
+
+defineFunc => type id numPrime | defineFunc
+type => int | float | bool | string | etc
+numPrime => num | E
 
 stmtFunc => stmt primeFunc | E
 stmtFunc -> stmt stmtPrime | E
