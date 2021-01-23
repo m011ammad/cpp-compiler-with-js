@@ -1,25 +1,5 @@
 "use strict";
 
-/*
-! Grammer 
-
-stmt => id=expr;
-    | defineFunc
-    | ifElseFunc
-    | while(expr) stmt;
-    | do stmt while (expr);
-    | for(optepr; optepr; optepr) stmt
-    | {stmts}
-stmts => stmts | stmt
-
-expr => term exprPrim
-exprPrim => + term exprPrim | - term exprPrim | &&term exprPrime | ||term exprPrime | E
-term => factor termPrime
-termPrime => *factor termPrime | /factor termPrime | E
-factor => number | (expr) | id
-
-*/
-
 // test for input
 // let tokenTable = [
 //     {name: 'for', value: '', line: 0},
