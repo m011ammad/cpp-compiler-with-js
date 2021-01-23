@@ -22,17 +22,9 @@ function Token(name){
     this.line = 0;
 }
 
-const initialInput = `if(x==2){
-    int x=2;
-    int x=2;
-    int x=2;
-    int x=2;
-    int x=2;
-    int x=2;
-    int x=2;
-    int x=2;
-    int x=2;
-} $`;
+const initialInput = `
+for(;;)
+ $`;
 var newInput = initialInput.replace(/  +/g, ' ');
 var buffer = new Buffer(newInput);
 var tokenTable = new Array();
