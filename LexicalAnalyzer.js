@@ -1,25 +1,31 @@
-function Buffer(input){
-    var forward = 0;
-    var lexemeBegining = 0;
-    this.input = input;    
-    this.nextChar = function() {return input[forward++];}
-    this.takeLexeme = function() {
-        let lexeme = input.substring(lexemeBegining, forward);
-        lexemeBegining = forward;
-        return lexeme;
+class Buffer {
+    constructor(input) {
+        var forward = 0;
+        var lexemeBegining = 0;
+        this.input = input;
+        this.nextChar = function () { return input[forward++]; };
+        this.takeLexeme = function () {
+            let lexeme = input.substring(lexemeBegining, forward);
+            lexemeBegining = forward;
+            return lexeme;
+        };
+        this.deleteCurrentLexeme = function () { forward = lexemeBegining; };
+        this.retract = function () { forward--; };
     }
-    this.deleteCurrentLexeme = function() {forward = lexemeBegining;}
-    this.retract = function() {forward--;}
 }
-function LineTracker(){
-    var line = 1;
-    this.nextLine = function(){line++;}
-    this.currentLine = function(){return line;}
+class LineTracker {
+    constructor() {
+        var line = 1;
+        this.nextLine = function () { line++; };
+        this.currentLine = function () { return line; };
+    }
 }
-function Token(name){
-    this.name = name;
-    this.value = 0;
-    this.line = 0;
+class Token {
+    constructor(name) {
+        this.name = name;
+        this.value = 0;
+        this.line = 0;
+    }
 }
 
 const initialInput = `
