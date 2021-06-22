@@ -6,11 +6,23 @@ for(;;)
 `;
 
 let newInput = initialInput.replace(/  +/g, ' ');
+
+// create a new object of Buffer class
 let buffer = new Buffer(newInput);
-let tokenTable = new Array();
-let state = 0;
+
+// create a new object of LineTracker class
 let lineTracker = new LineTracker();
 
+// create a array for tokenTable
+let tokenTable = new Array();
+
+// define and initialize the satate variable
+let state = 0;
+
+/*
+*   isReserved Function
+*   check if the string is not a reserved word
+*/
 function isReserved(c){
     switch(c){
     case 'if':
@@ -53,31 +65,42 @@ function isReserved(c){
         return 'id';
     }
 }
+
+/*
+*   isCharacterALetter Function
+*   check if the charachter is a letter
+*/
 function isCharacterALetter(c) {
     if(c===undefined)
         return false;
     return  /[a-zA-Z_]/.test(c);
 }
+
+/*
+*   isCharacterADigit Function
+*   check if the charachter is a digit
+*/
 function isCharacterADigit(c){
     return /[0-9]/.test(c);
 }
+
 function fail() {
     buffer.deleteCurrentLexeme();
     switch(state){
-        case 0: state = 3; /*Identifier*/
+        case 0: state = 3;      /*Identifier*/
             break;
-        case 3: state = 4; /*Space*/
+        case 3: state = 4;      /*Space*/
             break;
-        case 4: state = 5; /*Line Break*/
+        case 4: state = 5;      /*Line Break*/
             break;
-        case 5:            /*Number*/
+        case 5:                 /*Number*/
         case 7:
         case 8:
         case 9:
         case 10:
         case 11: state = 15; 
             break;
-        case 15:           /*Relational Oprations*/
+        case 15:                /*Relational Oprations*/
         case 22:
         case 24: state = 26;    /*Basic math Oprations*/
             break;
@@ -628,4 +651,5 @@ function lexicalAnalyze(){
         }
     }
 }
+// calling
 lexicalAnalyze();
