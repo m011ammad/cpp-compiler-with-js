@@ -9,21 +9,21 @@ class Buffer {
   }
 
   nextChar() {
-    return input[forward++];
+    return this.input[this.forward++];
   };
 
   takeLexeme() {
-    let lexeme = input.substring(lexemeBegining, forward);
-    lexemeBegining = forward;
+    let lexeme = this.input.substring(this.lexemeBegining, this.forward);
+    this.lexemeBegining = this.forward;
     return lexeme;
   };
 
   deleteCurrentLexeme() {
-    forward = lexemeBegining;
+    this.forward = this.lexemeBegining;
   };
-  
+
   retract() {
-    forward--;
+    this.forward--;
   };
 
 }
