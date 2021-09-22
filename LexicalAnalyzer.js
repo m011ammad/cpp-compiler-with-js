@@ -14,10 +14,15 @@ let buffer = new Buffer(newInput);
 let lineTracker = new LineTracker();
 
 // create an array for tokenTable
-let tokenTable = new Array();
+tokenTable = new Array();
 
 // define and initialize the satate variable
 let state = 0;
+
+let numberValue = '';
+
+// 
+let token;
 
 /*
 *   isReserved Function
@@ -168,11 +173,11 @@ function lexicalAnalyze(){
                 let lexeme = buffer.takeLexeme();
                 let lexemeType = isReserved(lexeme);
                 if(lexemeType==='id'){
-                    let token = new Token('id');
+                    token = new Token('id');
                     token.value = lexeme;
                     token.line = lineTracker.currentLine();
                 }else{
-                    let token = new Token(lexemeType);
+                    token = new Token(lexemeType);
                     token.value = lexemeType;
                     token.line = lineTracker.currentLine();                
                 }
@@ -263,8 +268,8 @@ function lexicalAnalyze(){
                 break;
             case 12:
                 buffer.retract();
-                let numberValue = buffer.takeLexeme();
-                let token = new Token('number');
+                numberValue = buffer.takeLexeme();
+                token = new Token('number');
                 token.value = numberValue;
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -272,8 +277,8 @@ function lexicalAnalyze(){
                 break;
             case 13:
                 buffer.retract();
-                let numberValue = buffer.takeLexeme();
-                let token = new Token('number');
+                numberValue = buffer.takeLexeme();
+                token = new Token('number');
                 token.value = numberValue;
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -281,8 +286,8 @@ function lexicalAnalyze(){
                 break;
             case 14:
                 buffer.retract();
-                let numberValue = buffer.takeLexeme();
-                let token = new Token('number');
+                numberValue = buffer.takeLexeme();
+                token = new Token('number');
                 token.value = numberValue;
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -310,7 +315,7 @@ function lexicalAnalyze(){
                 break;
             case 17:
                 buffer.takeLexeme();
-                let token = new Token("<=");
+                token = new Token("<=");
                 token.value = "<=";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -319,7 +324,7 @@ function lexicalAnalyze(){
             case 18:
                 buffer.retract();
                 buffer.takeLexeme();
-                let token = new Token("<");
+                token = new Token("<");
                 token.value = "<";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -334,7 +339,7 @@ function lexicalAnalyze(){
                 break;
             case 20:
                 buffer.takeLexeme();
-                let token = new Token(">=");
+                token = new Token(">=");
                 token.value = ">=";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -343,7 +348,7 @@ function lexicalAnalyze(){
             case 21:
                 buffer.retract();
                 buffer.takeLexeme();
-                let token = new Token(">");
+                token = new Token(">");
                 token.value = ">";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -358,7 +363,7 @@ function lexicalAnalyze(){
                 break;
             case 23:
                 buffer.takeLexeme();
-                let token = new Token("==");
+                token = new Token("==");
                 token.value = "==";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -373,7 +378,7 @@ function lexicalAnalyze(){
                 break;
             case 25:
                 buffer.takeLexeme();
-                let token = new Token("!=");
+                token = new Token("!=");
                 token.value = "!=";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -383,7 +388,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '+'){
                     buffer.takeLexeme();
-                    let token = new Token("+");
+                    token = new Token("+");
                     token.value = "+";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -395,7 +400,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '-'){
                     buffer.takeLexeme();
-                    let token = new Token("-");
+                    token = new Token("-");
                     token.value = "-";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -414,7 +419,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '*'){
                     buffer.takeLexeme();
-                    let token = new Token("**");
+                    token = new Token("**");
                     token.value = "**";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -422,7 +427,7 @@ function lexicalAnalyze(){
                 }else{
                     buffer.retract();
                     buffer.takeLexeme();
-                    let token = new Token("*");
+                    token = new Token("*");
                     token.value = "*";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -433,7 +438,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '/'){
                     buffer.takeLexeme();
-                    let token = new Token("/");
+                    token = new Token("/");
                     token.value = "/";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -445,7 +450,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '='){
                     buffer.takeLexeme();
-                    let token = new Token("=");
+                    token = new Token("=");
                     token.value = "=";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -457,7 +462,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '!'){
                     buffer.takeLexeme();
-                    let token = new Token("!");
+                    token = new Token("!");
                     token.value = "!";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -469,7 +474,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '('){
                     buffer.takeLexeme();
-                    let token = new Token("(");
+                    token = new Token("(");
                     token.value = "(";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -481,7 +486,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == ')'){
                     buffer.takeLexeme();
-                    let token = new Token(")");
+                    token = new Token(")");
                     token.value = ")";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -493,7 +498,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '{'){
                     buffer.takeLexeme();
-                    let token = new Token("{");
+                    token = new Token("{");
                     token.value = "{";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -505,7 +510,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '}'){
                     buffer.takeLexeme();
-                    let token = new Token("}");
+                    token = new Token("}");
                     token.value = "}";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -519,7 +524,7 @@ function lexicalAnalyze(){
                     c = buffer.nextChar();
                     if(c == '&'){
                     buffer.takeLexeme();
-                    let token = new Token("&&");
+                    token = new Token("&&");
                     token.value = "&&";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -529,7 +534,7 @@ function lexicalAnalyze(){
                     c = buffer.nextChar();
                     if(c == '|'){
                     buffer.takeLexeme();
-                    let token = new Token("||");
+                    token = new Token("||");
                     token.value = "||";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -542,7 +547,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '['){
                     buffer.takeLexeme();
-                    let token = new Token("[");
+                    token = new Token("[");
                     token.value = "[";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -554,7 +559,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == ']'){
                     buffer.takeLexeme();
-                    let token = new Token("]");
+                    token = new Token("]");
                     token.value = "]";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -566,7 +571,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == ';'){
                     buffer.takeLexeme();
-                    let token = new Token(";");
+                    token = new Token(";");
                     token.value = ";";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -578,7 +583,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == ':'){
                     buffer.takeLexeme();
-                    let token = new Token(":");
+                    token = new Token(":");
                     token.value = ":";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -590,7 +595,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '\"'){
                     buffer.takeLexeme();
-                    let token = new Token("\"");
+                    token = new Token("\"");
                     token.value = "\"";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -602,7 +607,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if(c == '\''){
                     buffer.takeLexeme();
-                    let token = new Token("\'");
+                    token = new Token("\'");
                     token.value = "\'";
                     token.line = lineTracker.currentLine();
                     tokenTable.push(token);
@@ -621,7 +626,7 @@ function lexicalAnalyze(){
                 c = buffer.nextChar();
                 if('\\'){
                 buffer.takeLexeme();
-                let token = new Token("\\\\");
+                token = new Token("\\\\");
                 token.value = "\\\\";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -629,7 +634,7 @@ function lexicalAnalyze(){
                 }else{
                 buffer.retract();
                 buffer.takeLexeme();
-                let token = new Token("\\");
+                token = new Token("\\");
                 token.value = "\\";
                 token.line = lineTracker.currentLine();
                 tokenTable.push(token);
@@ -651,5 +656,6 @@ function lexicalAnalyze(){
         }
     }
 }
+
 // calling
 lexicalAnalyze();
