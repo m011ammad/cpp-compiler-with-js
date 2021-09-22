@@ -3,9 +3,10 @@ A JavaScript Program to lexical and syntax analyse C++ program. It Uses various 
 Note: a compiler consists of several sections. this project includes lexical analysis and syntax analysis.
 
 ## How to use?
-open index.html with your browser and then open the console. you should see all the results in the console.\
+open index.html with your browser and then open the console or run it with node or another way.\
+now you should see all the results in the console.\
 you can see the token table at the top of the console and then logs at the bottom.\
-add your input in initialInput at the top of the lexicalAnalyzer.js and then see the logs as results
+add your input in initial Input at the top of the lexicalAnalyzer.js and then see the logs as results
 
 ## how it's work?
 in the lexicalAnalyzer, an input convet to a table of tokens.\
