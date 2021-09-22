@@ -6,11 +6,11 @@ class LineTracker {
   }
 
   nextLine() {
-    line++;
+    this.line++;
   };
 
   currentLine() {
-    return line;
+    return this.line;
   };
   
 }
