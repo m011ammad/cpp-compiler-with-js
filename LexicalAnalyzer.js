@@ -13,7 +13,7 @@ let buffer = new Buffer(newInput);
 // create a new object of LineTracker class
 let lineTracker = new LineTracker();
 
-// create a array for tokenTable
+// create an array for tokenTable
 let tokenTable = new Array();
 
 // define and initialize the satate variable
@@ -146,7 +146,7 @@ function fail() {
 }
 
 function lexicalAnalyze(){
-    let c='';
+    let c = '';
     while(1){
         switch(state){
             case 0: 
