@@ -1,7 +1,10 @@
 class Token {
+
+  value = 0;
+  line = 0;
+
   constructor(name) {
     this.name = name;
-    this.value = 0;
-    this.line = 0;
   }
+  
 }
