@@ -1,11 +1,16 @@
 class LineTracker {
+
+  line = 1;
+
   constructor() {
-    var line = 1;
-    this.nextLine = function () {
-      line++;
-    };
-    this.currentLine = function () {
-      return line;
-    };
   }
+
+  nextLine() {
+    line++;
+  };
+
+  currentLine() {
+    return line;
+  };
+  
 }
